@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //사용자 계정은 user1
         auth.inMemoryAuthentication().withUser("user1")
         //1111패스워드 인코딩결과
-        .password("$2a$10$McmGcjvD1bONKZI04loRru66yBg9Br/s7vZm.WO8UCY.JLK9XezOm")
+        .password(" $2a$10$4jlyIwxu2IXABqYBqoWE0eJFTwrrm5bJFjL7ZzNROw/2duaXR0qEi")
                 .roles("USER");
     }
 
@@ -39,6 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/sample/all").permitAll()
                 .antMatchers("/sample/member").hasRole("USER");
+
+//        http.formLogin();// 인증/인가에 문제시 로그인 화면
+//        http.csrf().disable();//csrf토큰을 발행하지 않는다.
+//        http.logout();//로그아웃 처리
     }
 
 }
