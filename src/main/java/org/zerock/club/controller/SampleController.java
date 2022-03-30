@@ -15,11 +15,13 @@ public class SampleController {
     public void exAll(){
         log.info("exAll");
     }
+
     //로그인한 사용자만이 접근할 수 있는
     @GetMapping("/member")
     public void exMember(){
         log.info("exMember");
     }
+
     //관리자(admin)권한이 있는 사용자만이 접근할 수 있는
     @GetMapping("/admin")
     public void exAdmin(){
