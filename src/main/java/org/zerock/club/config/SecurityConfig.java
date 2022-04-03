@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
+@Configuration  //설정파일을 만들기 위한 어노테이션 OR @Bean을 등록하기 위한 어노테이션
 @Log4j2
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -42,7 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin();// 인증/인가에 문제시 로그인 화면
         http.csrf().disable();//csrf토큰을 발행하지 않는다.
-        http.logout();//로그아웃 처리
+
+        //실제 로그인 시에 OAuth를 사용한 로그인이 가능하도록 함
+        http.oauth2Login();
     }
 
 }
