@@ -27,6 +27,7 @@ public class ClubAuthMemberDTO extends User {
 
         this.email=username;
         this.fromSocial=fromSocial;
+        //password는 부모 클래스를 사용하므로 별도의 멤버 변수로 선언하지 않았습니다.
     }
 
 }

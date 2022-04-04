@@ -19,6 +19,9 @@ public class SampleController {
     }
 
     //로그인한 사용자만이 접근할 수 있는
+    //컨트롤러에서 로그인된 사용자 정보를 확인하는 방법은 크게 2가지이다.
+    //SecurityContextHolder라는 객체를 사용하는 방법과 직접 파라미터와 어노테이션을 사용하는 방식이 있는데
+    //예제에서는 @AuthenticationPrincipla 어노테이션을 사용해서 처리한다.
     @GetMapping("/member")
     public void exMember(@AuthenticationPrincipal ClubAuthMemberDTO clubAuthMemberDTO){
         log.info("exMember");

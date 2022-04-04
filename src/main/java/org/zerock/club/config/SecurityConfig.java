@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //httpSecurity 객체는 대부분의 경우 빌더방식으로 구성이 가능하다.
         http.authorizeRequests()
                 .antMatchers("/sample/all").permitAll()
                 .antMatchers("/sample/member").hasRole("USER");
