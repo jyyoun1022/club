@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.zerock.club.entity.ClubMember;
+import org.zerock.club.entity.ClubMemberRole;
 import org.zerock.club.repository.ClubMemberRepository;
 
 import java.util.Optional;
@@ -29,13 +30,13 @@ public class ClubOAuth2UserDetailsServices extends DefaultOAuth2UserService {
 
         String clientName = userRequest.getClientRegistration().getClientName();
 
-        //OAuth로 연결한 클라이언트 이르모가 이떄 사용한 파라미터들을 출력합니다.
-        log.info("clientName : "+clientName);
-        log.info(userRequest.getAdditionalParameters());
+        //OAuth로 연결한 클라이언트 이름이 이떄 사용한 파라미터들을 출력합니다.
+        log.info("clientName : "+clientName);//"google"
+        log.info("파라미터 어떻게 나오니? : "+userRequest.getAdditionalParameters()); //id_token{xxx}으로 출력
         //DefaultOAuth2UserRequest라는 타입의 파라미터와 OAuth2User 라는 타입의 리턴 타입을 반환합니다.
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
+        log.info("OAuth2User : "+oAuth2User);// Name,Granted Authorities,User Attrivutes 출력
         log.info("=======================");
 
         //loadUser()에서 사용하는 OAuth2UserRequest 는 현재 어떤 서비스를 통해서 로그인이 이루어 졌는지
@@ -59,6 +60,8 @@ public class ClubOAuth2UserDetailsServices extends DefaultOAuth2UserService {
         log.info(email);
 
 
+        ClubMember member = saveSocialMember(email);
+
 
 
         return oAuth2User;
@@ -67,6 +70,23 @@ public class ClubOAuth2UserDetailsServices extends DefaultOAuth2UserService {
     //ClubMemberRepository를 이용해서 소셜 로그인한 이메일 을 처리하는 부분
     private ClubMember saveSocialMember(String email){
         Optional<ClubMember> result = clubMemberRepository.findByEmail(email,true);
+
+        //추출된 이메일 주소로 현재 데이터베이스에 있는 사용자가 아니라면 자동으로 회원 가입을 처리합니다.
+        if(result.isPresent()){
+            return result.get();
+        }
+        ClubMember clubMember = ClubMember.builder().
+                email(email)
+                .name(email)
+                .password(passwordEncoder.encode("1111"))
+                .fromSocial(true)
+                .build();
+
+        clubMember.addMemberRole(ClubMemberRole.USER);
+
+        clubMemberRepository.save(clubMember);
+
+        return clubMember;
 
     }
 }
