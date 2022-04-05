@@ -1,6 +1,7 @@
 package org.zerock.club.controller;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ public class SampleController {
 
     //로그인하지 않은 사용자도 접근할 수 있는
     @GetMapping("/all")
+    @PreAuthorize("permitAll()")
     public void exAll(){
         log.info("exAll");
     }
@@ -31,7 +33,16 @@ public class SampleController {
 
     //관리자(admin)권한이 있는 사용자만이 접근할 수 있는
     @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
     public void exAdmin(){
         log.info("exAdmin");
+    }
+
+    @PreAuthorize("#clubAuthMember != null && #clubAuthMember.username eq \"user95@naver.com\"")
+    @GetMapping("/exOnly")
+    public String exMemberOnly(@AuthenticationPrincipal ClubAuthMemberDTO clubAuthMember){
+        log.info(clubAuthMember);
+
+        return "/sample/admin";
     }
 }
