@@ -2,6 +2,7 @@ package org.zerock.club.secutiry.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.zerock.club.entity.ClubMember;
 import org.zerock.club.entity.ClubMemberRole;
 import org.zerock.club.repository.ClubMemberRepository;
+import org.zerock.club.secutiry.dto.ClubAuthMemberDTO;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -59,12 +62,25 @@ public class ClubOAuth2UserDetailsServices extends DefaultOAuth2UserService {
         }
         log.info(email);
 
-
         ClubMember member = saveSocialMember(email);
+        ClubAuthMemberDTO clubAuthMemberDTO = new ClubAuthMemberDTO(
+                member.getEmail(),
+                member.getPassword(),
+
+                member.getRoleSet().stream().map(
+                        role -> new SimpleGrantedAuthority("ROLE_"+role.name())).collect(Collectors.toList())
+                ,true,
+                oAuth2User.getAttributes()
+        );
+        clubAuthMemberDTO.setName(member.getName());
+        return clubAuthMemberDTO;
 
 
-
-        return oAuth2User;
+//        ClubMember member = saveSocialMember(email);
+//
+//
+//
+//        return oAuth2User;
 
     }
     //ClubMemberRepository를 이용해서 소셜 로그인한 이메일 을 처리하는 부분

@@ -2,6 +2,7 @@ package org.zerock.club.config;
 
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,10 +10,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.zerock.club.secutiry.handler.ClubLoginSuccessHandler;
+import org.zerock.club.secutiry.service.ClubUserDetailsService;
 
 @Configuration  //설정파일을 만들기 위한 어노테이션 OR @Bean을 등록하기 위한 어노테이션
 @Log4j2
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private ClubUserDetailsService userDetailsService;
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -45,7 +51,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();//csrf토큰을 발행하지 않는다.
 
         //실제 로그인 시에 OAuth를 사용한 로그인이 가능하도록 함
-        http.oauth2Login();
-    }
+        http.oauth2Login().successHandler(successHandler());
+        http.rememberMe().tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService);//7일
 
+
+    }
+    @Bean
+    public ClubLoginSuccessHandler successHandler(){
+        return new ClubLoginSuccessHandler(passwordEncoder());
+    }
 }
