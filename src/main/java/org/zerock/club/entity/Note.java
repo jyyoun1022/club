@@ -19,6 +19,7 @@ public class Note extends BaseEntity{
     private String title;
 
     private String content;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private ClubMember clubMember;
 
