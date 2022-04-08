@@ -22,7 +22,7 @@ public class ClubAuthMemberDTO extends User implements OAuth2User {
     //부모 클래스인 User클래스에 사용자 정의 생성자가 있으므로 반드시 호출할 필요가 있습니다.
 
     //ClubAuthMemberDTO는 DTO역할을 수행하는 클래스인 동시에 스프링 시큐리티에서 인증/인가 작업에 사용할 수 있습니다.
-    //password는 부모 클래스를 사용하므로 별도의 멤버 변수로는 사용하지 않습니다.
+    //Password는 부모 클래스를 사용하므로 별도의 멤버 변수로는 사용하지 않습니다.
 
 
 
