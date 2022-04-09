@@ -39,7 +39,7 @@ public class ClubOAuth2UserDetailsServices extends DefaultOAuth2UserService {
         //DefaultOAuth2UserRequest라는 타입의 파라미터와 OAuth2User 라는 타입의 리턴 타입을 반환합니다.
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        log.info("OAuth2User : "+oAuth2User);// Name,Granted Authorities,User Attrivutes 출력
+        log.info("OAuth2User : "+oAuth2User);// Name,Granted Authorities,User Attributes 출력
         log.info("=======================");
 
         //loadUser()에서 사용하는 OAuth2UserRequest 는 현재 어떤 서비스를 통해서 로그인이 이루어 졌는지
